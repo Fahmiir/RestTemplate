@@ -24,10 +24,10 @@ public class RestTemplateService {
     @Autowired 
     private RestTemplate restTempl;
     
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+//    @Bean
+//    public RestTemplate restTemplate() {
+//        return new RestTemplate();
+//    }
 	
 	public Response saveBookData (BookRequest request) {
 		
@@ -41,16 +41,17 @@ public class RestTemplateService {
             ResponseEntity<String> responseEntity = restTempl.exchange("http://localhost:8080/Books/api/save", HttpMethod.POST, entity, String.class);
 //            String jsonStr = responseEntity.getBody();
 //            bookResponse = new Gson().fromJson(jsonStr, BookResponse.class);		
-            
+        	response.setRc("000");	
+    		response.setMessage("Insert Data Sukses");    
 		} catch (HttpStatusCodeException e) {
             String errorpayload = e.getResponseBodyAsString();
-            System.out.println("HttpStatusCodeException: "+errorpayload);		
+            System.out.println("HttpStatusCodeException: "+errorpayload);
+            response.setRc("500");
+            response.setMessage("Internal Server Error");
 		} catch (RestClientException e) {
 			System.out.println("RestClientException: "+e.getLocalizedMessage());
 		}
 		
-		response.setRc("000");
-		response.setMessage("Insert Data Sukses");
 		
 		return response;
 		

@@ -2,11 +2,7 @@ package com.example.demo.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.BookRequest;
 import com.example.demo.dto.BookResponse;
@@ -31,5 +27,16 @@ public class RestTemplateController {
     public BookResponse [] getAllData() {
     	return rs.getAllBookData();
     }
+
+	@PutMapping("/edit")
+	public Response editData(@RequestBody BookRequest request) {
+		System.out.println("tes");
+		return rs.editBookData(request);
+	}
+
+	@DeleteMapping("/deleteById/{id}")
+	public Response deleteData(@PathVariable(value="id")Integer id){
+		return rs.deleteBookData(id);
+	}
 
 }

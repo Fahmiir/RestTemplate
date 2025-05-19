@@ -81,4 +81,46 @@ public class RestTemplateService {
 		
 	}
 
+	public Response editBookData (BookRequest request){
+		Response response = new Response();
+		try{
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+			HttpEntity<BookRequest> entity = new HttpEntity<>(request,headers);
+			ResponseEntity<String> responseEntity = restTempl.exchange("http://localhost:8080/Books/api/update", HttpMethod.PUT, entity, String.class);
+//            String jsonStr = responseEntity.getBody();
+//            bookResponse = new Gson().fromJson(jsonStr, BookResponse.class);
+			response.setRc("000");
+			response.setMessage("Edit Data Sukses");
+		} catch (HttpStatusCodeException e) {
+			String errorpayload = e.getResponseBodyAsString();
+			System.out.println("HttpStatusCodeException: "+errorpayload);
+			response.setRc("500");
+			response.setMessage("Internal Server Error");
+		} catch (RestClientException e){
+			System.out.println("RestClientException: "+e.getLocalizedMessage());
+		}
+		return response;
+	}
+
+	public Response deleteBookData(Integer id){
+		Response response = new Response();
+		try{
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+			HttpEntity<BookRequest> entity = new HttpEntity<>(headers);
+			ResponseEntity<String> responseEntity = restTempl.exchange("http://localhost:8080/Books/api/deleteById/"+id, HttpMethod.DELETE, entity, String.class);
+			response.setRc("000");
+			response.setMessage("Delete Data Sukses");
+		}catch (HttpStatusCodeException e) {
+			String errorpayload = e.getResponseBodyAsString();
+			System.out.println("HttpStatusCodeException: "+errorpayload);
+			response.setRc("500");
+			response.setMessage("Internal Server Error");
+		} catch (RestClientException e){
+			System.out.println("RestClientException: "+e.getLocalizedMessage());
+		}
+		return response;
+	}
+
 }

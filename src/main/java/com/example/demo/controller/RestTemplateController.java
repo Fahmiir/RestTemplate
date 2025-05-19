@@ -9,6 +9,8 @@ import com.example.demo.dto.BookResponse;
 import com.example.demo.dto.Response;
 import com.example.demo.service.RestTemplateService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class RestTemplateController {
@@ -37,6 +39,11 @@ public class RestTemplateController {
 	@DeleteMapping("/deleteById/{id}")
 	public Response deleteData(@PathVariable(value="id")Integer id){
 		return rs.deleteBookData(id);
+	}
+
+	@PostMapping("saveAll")
+	public Response saveAll(@RequestBody List<BookRequest> request){
+		return rs.saveAllBookData(request);
 	}
 
 }

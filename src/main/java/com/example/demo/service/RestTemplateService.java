@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.json.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -112,6 +114,26 @@ public class RestTemplateService {
 			ResponseEntity<String> responseEntity = restTempl.exchange("http://localhost:8080/Books/api/deleteById/"+id, HttpMethod.DELETE, entity, String.class);
 			response.setRc("000");
 			response.setMessage("Delete Data Sukses");
+		}catch (HttpStatusCodeException e) {
+			String errorpayload = e.getResponseBodyAsString();
+			System.out.println("HttpStatusCodeException: "+errorpayload);
+			response.setRc("500");
+			response.setMessage("Internal Server Error");
+		} catch (RestClientException e){
+			System.out.println("RestClientException: "+e.getLocalizedMessage());
+		}
+		return response;
+	}
+
+	public Response saveAllBookData(List<BookRequest> request){
+        Response response = new Response();
+		try{
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+			HttpEntity<List<BookRequest>> entity = new HttpEntity<>(request,headers);
+			restTempl.exchange("http://localhost:8080/Books/api/saveAll", HttpMethod.POST, entity, String.class);
+			response.setRc("000");
+			response.setMessage("Simpan Banyak Data Sukses");
 		}catch (HttpStatusCodeException e) {
 			String errorpayload = e.getResponseBodyAsString();
 			System.out.println("HttpStatusCodeException: "+errorpayload);

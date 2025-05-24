@@ -18,6 +18,7 @@ import com.example.demo.dto.BookRequest;
 import com.example.demo.dto.BookResponse;
 import com.example.demo.dto.Response;
 import com.google.gson.Gson;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 @Service 
@@ -142,6 +143,37 @@ public class RestTemplateService {
 		} catch (RestClientException e){
 			System.out.println("RestClientException: "+e.getLocalizedMessage());
 		}
+		return response;
+	}
+
+	public Response deleteMultipleBookData(List<Integer> ids){
+		Response response = new Response();
+
+		try{
+			UriComponentsBuilder builder = UriComponentsBuilder
+					.fromHttpUrl("http://localhost:8080/Books/api/deleteByMultipleId");
+
+			for (Integer id : ids) {
+				builder.queryParam("bookid", id);  // multiple params with same name
+			}
+
+			String uri = builder.toUriString();
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+			HttpEntity<List<Integer>> entity = new HttpEntity<>(ids,headers);
+			restTempl.exchange(uri, HttpMethod.DELETE, entity, String.class);
+			response.setRc("000");
+			response.setMessage("Delete Banyak Data Sukses");
+
+		} catch (HttpStatusCodeException e){
+			String errorpayload = e.getResponseBodyAsString();
+			System.out.println("HttpStatusCodeException: "+errorpayload);
+			response.setRc("500");
+			response.setMessage("Internal Server Error");
+		} catch (RestClientException e){
+			System.out.println("RestClientException: "+e.getLocalizedMessage());
+		}
+
 		return response;
 	}
 

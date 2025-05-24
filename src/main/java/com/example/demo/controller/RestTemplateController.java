@@ -46,4 +46,9 @@ public class RestTemplateController {
 		return rs.saveAllBookData(request);
 	}
 
+	@DeleteMapping("/deleteByQueryParam")
+	public Response deleteByQueryParam(@RequestParam("bookid") List<Integer> ids){
+		return rs.deleteMultipleBookData(ids);
+	}
+
 }

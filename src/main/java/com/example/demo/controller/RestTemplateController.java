@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import com.example.demo.dto.BookId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +55,11 @@ public class RestTemplateController {
 	@DeleteMapping("/deleteMany")
 	public Response deleteMany(@RequestBody List<Integer> ids){
 		return rs.deleteManyBookData(ids);
+	}
+
+	@DeleteMapping("/deleteManyKey")
+	public Response deleteManyKey(@RequestBody BookId ids){
+		return rs.deleteManyWithKey(ids.getBookid());
 	}
 
 }

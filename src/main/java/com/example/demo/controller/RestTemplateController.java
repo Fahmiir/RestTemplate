@@ -51,4 +51,9 @@ public class RestTemplateController {
 		return rs.deleteMultipleBookData(ids);
 	}
 
+	@DeleteMapping("/deleteMany")
+	public Response deleteMany(@RequestBody List<Integer> ids){
+		return rs.deleteManyBookData(ids);
+	}
+
 }

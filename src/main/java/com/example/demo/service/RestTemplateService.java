@@ -177,4 +177,24 @@ public class RestTemplateService {
 		return response;
 	}
 
+	public Response deleteManyBookData(List<Integer> ids){
+		Response response = new Response();
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
+			HttpEntity<List<Integer>> entity = new HttpEntity<>(ids,headers);
+			restTempl.exchange("http://localhost:8080/Books/api/deleteMany",HttpMethod.DELETE, entity, String.class);
+			response.setRc("000");
+			response.setMessage("Delete Banyak Data Sukses");
+		} catch (HttpStatusCodeException e){
+			String errorpayload = e.getResponseBodyAsString();
+			System.out.println("HttpStatusCodeException: "+errorpayload);
+			response.setRc("500");
+			response.setMessage("Internal Server Error");
+		} catch (RestClientException e){
+			System.out.println("RestClientException: "+e.getLocalizedMessage());
+		}
+		return response;
+	}
+
 }
